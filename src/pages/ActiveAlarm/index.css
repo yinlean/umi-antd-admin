@@ -1,0 +1,27 @@
+.active-content {
+  display: flex;
+  padding: 5px 0;
+  height: 90vh;
+}
+.active-content .rule-list {
+  width: 240px;
+  padding: 10px;
+}
+.active-content .rule-list .rules-item {
+  height: 30px;
+  color: #5B6379;
+}
+.active-content .warning-card {
+  flex: 1;
+  padding: 10px;
+  margin-left: 20px;
+}
+.active-content .warning-card .act-card {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.active-content .warning-card .act-card .act-num {
+  font-size: 30px;
+  text-align: right;
+}
