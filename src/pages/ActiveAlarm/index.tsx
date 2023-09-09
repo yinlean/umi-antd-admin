@@ -1,9 +1,11 @@
 import { Col, Row } from 'antd';
+import { useState } from 'react';
 import ActCard from './ActCard';
 import ActSearch from './ActSearch';
 import RuleDetail from './RuleDetail';
 import styles from './index.less';
 const ActiveAlarm = () => {
+  const [visible, setVisible] = useState(false);
   return (
     <div className={styles['active-content']}>
       <div className={styles['rule-list']}>
@@ -29,14 +31,24 @@ const ActiveAlarm = () => {
         <ActSearch />
         <div className={styles['act-card']}>
           {[1, 2, 3].map((v, index) => (
-            <ActCard key={index} bgc="#F8E8E6" fontColor="#D53322" />
+            <ActCard
+              key={index}
+              bgc="#F8E8E6"
+              fontColor="#D53322"
+              setVisible={setVisible}
+            />
           ))}
           {[1, 2, 3].map((v, index) => (
-            <ActCard key={index} bgc="#FBF2E7" fontColor="#E38434" />
+            <ActCard
+              key={index}
+              bgc="#FBF2E7"
+              fontColor="#E38434"
+              setVisible={setVisible}
+            />
           ))}
         </div>
       </div>
-      <RuleDetail />
+      <RuleDetail visible={visible} setVisible={setVisible} />
     </div>
   );
 };

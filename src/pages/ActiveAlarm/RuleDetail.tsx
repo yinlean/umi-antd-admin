@@ -1,6 +1,12 @@
 import { Drawer, Table, Tag } from 'antd';
 
-function RuleDetail() {
+interface Iprops {
+  visible: boolean;
+  setVisible: (f: boolean) => void;
+}
+
+function RuleDetail(props: Iprops) {
+  const { visible, setVisible } = props;
   const columns = [
     {
       title: '集群',
@@ -37,8 +43,9 @@ function RuleDetail() {
       title="Basic Drawer"
       placement="right"
       width={600}
-      // onClose={onClose}
-      open={true}
+      closable={false}
+      open={visible}
+      onClose={() => setVisible(false)}
     >
       <Table columns={columns} dataSource={[{}]} />
     </Drawer>

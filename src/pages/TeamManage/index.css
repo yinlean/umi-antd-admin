@@ -1,0 +1,17 @@
+.team-manage {
+  display: flex;
+  padding: 5px 0;
+  height: 90vh;
+}
+.team-manage .rule-list {
+  width: 240px;
+  padding: 10px;
+}
+.team-manage .rule-list .rules-item {
+  height: 30px;
+  color: #5B6379;
+}
+.team-manage .team-list {
+  flex: 1;
+  padding: 10px;
+}

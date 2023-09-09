@@ -3,13 +3,15 @@ import styles from './index.less';
 interface Iprops {
   bgc: string;
   fontColor: string;
+  setVisible: (f: boolean) => void;
 }
 
 function ActCard(props: Iprops) {
-  const { bgc, fontColor } = props;
+  const { bgc, fontColor, setVisible } = props;
   return (
     <Card
       bordered={false}
+      onClick={() => setVisible(true)}
       style={{
         width: 240,
         height: 140,
