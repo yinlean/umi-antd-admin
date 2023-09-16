@@ -1,47 +1,93 @@
+import {
+  addTeamUser,
+  createBiz,
+  deleteBiz,
+  deleteTeamUser,
+  getBizInfo,
+  getBizTeamInfo,
+  getBizUserInfo,
+  getUserList,
+  updateBiz,
+} from '@/api/alert';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Form, Input, Modal, Row, Table } from 'antd';
-import { useState } from 'react';
+import {
+  Alert,
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Table,
+  message,
+} from 'antd';
+import { useEffect, useState } from 'react';
 import styles from './index.less';
 const TeamManage = () => {
   const [visible, setVisible] = useState(false);
   const [addUserVisible, setAddUserVVisible] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [teamList, setTeamLIst] = useState<any[]>([]);
+  const [tableData, setTableData] = useState<any[]>([]);
+  const [usertableLIst, setUsertableLIst] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [userTotal, setUserTotal] = useState(0);
+
+  const [bizId, setBizId] = useState<any>();
+  const [teamType, setTeamType] = useState<{
+    type: 'create' | 'edit';
+    value?: {
+      id: string;
+      name: string;
+      description: string;
+    };
+  }>({
+    type: 'create',
+  });
+  const [teamInfo, setTeamInfo] = useState();
+  const [form] = Form.useForm();
+
   const columns = [
     {
       title: '用户名',
-      dataIndex: '',
-      render: () => <div className="">张三</div>,
+      dataIndex: 'name',
     },
     {
       title: '显示名',
-      dataIndex: '',
-      render: () => '张三丰',
-    },
-    {
-      title: '邮箱',
-      dataIndex: '',
-      render: () => <div>2023-09-07 12:00:00</div>,
+      dataIndex: 'displayName',
     },
     {
       title: '手机',
-      dataIndex: '',
-      render: () => <div>13388889999</div>,
+      dataIndex: 'phone',
     },
     {
       title: '操作',
       key: '33',
-      render: () => (
-        <>
-          <Button type="link" danger>
-            删除
-          </Button>
-        </>
+      render: (_, record) => (
+        <Button
+          type="link"
+          danger
+          onClick={() => {
+            Modal.confirm({
+              content: '确定删除吗?',
+              onOk: () => deleteItem(record.id),
+            });
+          }}
+        >
+          删除
+        </Button>
       ),
     },
   ];
-
+  const deleteItem = async (id) => {
+    const res = await deleteTeamUser({ userID: id, bizID: teamInfo?.id });
+    console.log('res====>>', res);
+    if (res.code === 200) {
+      message.success('删除成功');
+      getTeamList();
+    }
+  };
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {
@@ -49,35 +95,134 @@ const TeamManage = () => {
     onChange: onSelectChange,
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    const params = await form.validateFields();
+
+    if (teamType.type === 'create') {
+      const res = await createBiz(params);
+      if (res.code === 200) {
+        setVisible(false);
+        message.success('创建成功');
+        getTeamList();
+      }
+      getTeamList();
+    } else {
+      const res = await updateBiz({ ...params, id: teamInfo.id });
+      if (res.code === 200) {
+        setVisible(false);
+        message.success('更新成功');
+        getTeamList();
+      }
+      getTeamInfo();
+    }
     setVisible(false);
   };
   const handleCancel = () => {
     setVisible(false);
   };
-  const userOk = () => {
-    setAddUserVVisible(false);
+  // 添加成员
+  const userOk = async () => {
+    const res = await addTeamUser({
+      bizID: teamInfo?.id,
+      userID: selectedRowKeys,
+    });
+    console.log('添加成员===>', res);
+    if (res.code === 200) {
+      message.success('添加成功');
+      setAddUserVVisible(false);
+      getTeamList();
+    }
   };
   const userCancel = () => {
     setAddUserVVisible(false);
   };
+
+  const getUserListApi = async () => {
+    const res = await getUserList({ page: 1, onePage: 100 });
+    const { count, query } = res;
+    setUserTotal(count);
+    setUsertableLIst(query);
+  };
+
+  const getTeamInfo = async () => {
+    if (!bizId) return;
+    const res = await getBizUserInfo({
+      bizID: bizId,
+      onePage: 100,
+      page: 1,
+    });
+    setTableData(res.query ?? []);
+  };
+
+  const getTeamList = async () => {
+    const res = await getBizInfo({
+      page: 1,
+      onePage: 100,
+    });
+    setTeamLIst(res.query ?? []);
+    setTotal(res.count);
+  };
+
+  const getBizTeamInfo_ = async () => {
+    if (!bizId) return;
+    const res = await getBizTeamInfo({
+      id: bizId,
+    });
+    console.log('res===>', res);
+    setTeamInfo(res);
+  };
+  useEffect(() => {
+    getUserListApi();
+    getTeamList();
+  }, []);
+  useEffect(() => {
+    getTeamInfo();
+    getBizTeamInfo_();
+  }, [bizId]);
 
   const CreatorInfo = () => {
     return (
       <>
         <Row>
           <Col>
-            <h4>CDH</h4>
+            <h4>{teamInfo?.name ?? '-'}</h4>
           </Col>
-          <Col offset={1} onClick={() => setVisible(true)}>
+          <Col
+            offset={1}
+            onClick={() => {
+              if (!teamInfo?.id) return message.error('先选择一个业务');
+              setTeamType({
+                type: 'edit',
+                value: teamInfo,
+              });
+              form.setFieldsValue(teamInfo);
+              setVisible(true);
+            }}
+          >
             <EditOutlined />
           </Col>
           <Col offset={1}>
-            <DeleteOutlined />
+            <DeleteOutlined
+              onClick={() => {
+                Modal.confirm({
+                  content: '确定删除吗?',
+                  onOk: async () => {
+                    const res = await deleteBiz({ id: teamInfo?.id });
+                    if (res.code === 200) {
+                      setVisible(false);
+                      message.success('删除成功');
+                      setTeamInfo({});
+                      setTableData([]);
+                      getTeamList();
+                    }
+                  },
+                });
+              }}
+            />
           </Col>
         </Row>
         <Row>
-          <Col>备注: 负责人:xxxx</Col>
+          <Col>备注: {teamInfo?.description ?? '-'}</Col>
         </Row>
       </>
     );
@@ -95,7 +240,15 @@ const TeamManage = () => {
             <h3>聚合规则</h3>
           </Col>
           <Col>
-            <Button type="link" onClick={() => setVisible(true)}>
+            <Button
+              type="link"
+              onClick={() => {
+                setTeamType({
+                  type: 'create',
+                });
+                setVisible(true);
+              }}
+            >
               新建团队
             </Button>
           </Col>
@@ -104,13 +257,23 @@ const TeamManage = () => {
         <Row>
           <Input placeholder="搜索团队名称"></Input>
         </Row>
-        <Row>
-          <div>团队名称--1</div>
-        </Row>
-
-        <Row>
-          <div>团队名称--2</div>
-        </Row>
+        {teamList.map((v, i) => (
+          <Row
+            key={v.id}
+            style={{ marginTop: 10, cursor: 'pointer' }}
+            justify="space-between"
+          >
+            <Col>{i + 1}</Col>
+            <Col
+              onClick={() => {
+                setBizId(v.id);
+                // getTeamInfo(v.id)
+              }}
+            >
+              {v.name}
+            </Col>
+          </Row>
+        ))}
       </div>
       <div className={styles['team-list']}>
         <Alert
@@ -126,10 +289,18 @@ const TeamManage = () => {
             ></Input.Search>
           </Col>
           <Col>
-            <Button onClick={() => setAddUserVVisible(true)}>添加成员</Button>
+            <Button
+              onClick={() => {
+                if (!teamInfo?.id) return message.error('先选择一个业务');
+                setSelectedRowKeys([]);
+                setAddUserVVisible(true);
+              }}
+            >
+              添加成员
+            </Button>
           </Col>
         </Row>
-        <Table columns={columns} dataSource={[{}]} />
+        <Table columns={columns} dataSource={tableData} />
       </div>
 
       {/* 新增/编辑团队信息 */}
@@ -139,11 +310,11 @@ const TeamManage = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form labelCol={{ span: 4 }}>
-          <Form.Item label="团队名称">
+        <Form labelCol={{ span: 4 }} form={form}>
+          <Form.Item label="团队名称" name="name">
             <Input placeholder="请输入" />
           </Form.Item>
-          <Form.Item label="备注">
+          <Form.Item label="备注" name="description">
             <Input placeholder="请输入" />
           </Form.Item>
         </Form>
@@ -166,9 +337,10 @@ const TeamManage = () => {
           </Col>
         </Row>
         <Table
+          rowKey="id"
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={[{}]}
+          dataSource={usertableLIst}
         />
       </Modal>
     </div>

@@ -1,0 +1,54 @@
+Arguments: 
+  /Users/bytedance/.nvm/versions/node/v18.16.0/bin/node /Users/bytedance/.nvm/versions/node/v14.19.1/bin/yarn add query-string
+
+PATH: 
+  /Users/bytedance/.nvm/versions/node/v18.16.0/bin:/Users/bytedance/.nvm/versions/node/v14.19.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/puppetlabs/bin:/Users/bytedance/.nvm/versions/node/v14.19.1/bin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  18.16.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: EEXIST: file already exists, mkdir '/Users/bytedance/Desktop/log-data-pro/uni-antd-amdin/node_modules/antd/node_modules'
+
+npm manifest: 
+  {
+    "private": true,
+    "author": "yinlean <yinlean@bytedance.com>",
+    "scripts": {
+      "dev": "max dev",
+      "build": "max build",
+      "format": "prettier --cache --write .",
+      "prepare": "husky install",
+      "postinstall": "max setup",
+      "setup": "max setup",
+      "start": "npm run dev"
+    },
+    "dependencies": {
+      "@ant-design/icons": "^5.0.1",
+      "@ant-design/pro-components": "^2.4.4",
+      "@umijs/max": "^4.0.79",
+      "antd": "^5.4.0"
+    },
+    "devDependencies": {
+      "@types/react": "^18.0.33",
+      "@types/react-dom": "^18.0.11",
+      "husky": "^8.0.3",
+      "lint-staged": "^13.2.0",
+      "prettier": "^2.8.7",
+      "prettier-plugin-organize-imports": "^3.2.2",
+      "prettier-plugin-packagejson": "^2.4.3",
+      "typescript": "^5.0.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -14,6 +14,11 @@ export default defineConfig({
       redirect: '/home',
     },
     {
+      path: '/login',
+      component: './Login',
+      layout: false,
+    },
+    {
       name: '首页',
       path: '/home',
       icon: 'HomeOutlined',
@@ -72,6 +77,18 @@ export default defineConfig({
       icon: 'BarChartOutlined',
       component: './SearchOnline',
     },
+    {
+      path: '/*',
+      component: './NotFound',
+      layout: false,
+    },
   ],
   npmClient: 'yarn',
+  proxy: {
+    '/api': {
+      target: 'http://192.168.247.8:8080/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '/api' },
+    },
+  },
 });
