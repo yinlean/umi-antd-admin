@@ -4,6 +4,7 @@ export default (initialState: API.UserInfo) => {
   const canSeeAdmin = !!(
     initialState && initialState.name !== 'dontHaveAccess'
   );
+  console.log('initialState====>', initialState);
   return {
     canSeeAdmin,
   };

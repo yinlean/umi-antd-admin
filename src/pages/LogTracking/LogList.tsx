@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 function LogList({ ws }: { ws: WebSocket }) {
   const [logList, setLogList] = useState<string[]>([]);
-
+  if (!ws) return;
   ws.onmessage = function (evt) {
     console.log(evt.data);
     const received_msg = JSON.parse(evt.data || '')?.content ?? '';

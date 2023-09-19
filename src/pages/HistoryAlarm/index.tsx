@@ -1,36 +1,50 @@
+import { getAlert } from '@/api/alert';
 import { AppstoreOutlined } from '@ant-design/icons';
 import { Badge, Form, Input, Select, Table, Tag } from 'antd';
+
+const columns = [
+  {
+    title: '集群',
+    dataIndex: '',
+    render: () => (
+      <div className="">
+        <Badge color="#f00" /> default
+      </div>
+    ),
+  },
+  {
+    title: '规则标签及事件',
+    dataIndex: '',
+    render: () => (
+      <div>
+        <Tag color="purple">cpu=cpu_total</Tag>
+        <Tag color="purple">cpu=cpu_total</Tag>
+        <Tag color="purple">cpu=cpu_total</Tag>
+        <Tag color="purple">cpu=cpu_total</Tag>
+        <Tag color="purple">cpu=cpu_total</Tag>
+        <Tag color="purple">cpu=cpu_total</Tag>
+      </div>
+    ),
+  },
+  {
+    title: '计算时间',
+    dataIndex: '',
+    render: () => <div>2023-09-07 12:00:00</div>,
+  },
+];
+
 const HistoryAlarm = () => {
-  const columns = [
-    {
-      title: '集群',
-      dataIndex: '',
-      render: () => (
-        <div className="">
-          <Badge color="#f00" /> default
-        </div>
-      ),
-    },
-    {
-      title: '规则标签及事件',
-      dataIndex: '',
-      render: () => (
-        <div>
-          <Tag color="purple">cpu=cpu_total</Tag>
-          <Tag color="purple">cpu=cpu_total</Tag>
-          <Tag color="purple">cpu=cpu_total</Tag>
-          <Tag color="purple">cpu=cpu_total</Tag>
-          <Tag color="purple">cpu=cpu_total</Tag>
-          <Tag color="purple">cpu=cpu_total</Tag>
-        </div>
-      ),
-    },
-    {
-      title: '计算时间',
-      dataIndex: '',
-      render: () => <div>2023-09-07 12:00:00</div>,
-    },
-  ];
+  // 获取历史告警列表
+  const getHistoryList = async () => {
+    // if (!bizID) return;
+    const res = await getAlert({
+      page: 1,
+      onePage: 100,
+      // bizID: bizId,
+      // startTime:
+    });
+    console.log('res===>', res);
+  };
   return (
     <div>
       <Form

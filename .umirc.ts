@@ -86,7 +86,8 @@ export default defineConfig({
   npmClient: 'yarn',
   proxy: {
     '/api': {
-      target: 'http://192.168.247.8:8080/',
+      // target: 'http://192.168.247.8:8080/',
+      target: 'http://krui3j.natappfree.cc/',
       changeOrigin: true,
       pathRewrite: { '^/api': '/api' },
     },

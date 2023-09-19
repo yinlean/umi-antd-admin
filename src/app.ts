@@ -3,12 +3,17 @@
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
 import type { RequestConfig } from '@umijs/max';
+import { history } from '@umijs/max';
 import { message } from 'antd';
 import queryString from 'query-string';
 import Cat from './assets/cat.jpeg';
 
-export async function getInitialState(): Promise<{ name: string }> {
-  return { name: '@umijs/max' };
+export async function getInitialState(): Promise<{
+  name: string;
+  avatar: string;
+  userName: string;
+}> {
+  return { name: '@umijs/max', avatar: './assets/cat.jpeg', userName: '张三' };
 }
 
 export const layout = () => {
@@ -19,11 +24,14 @@ export const layout = () => {
     menu: {
       locale: false,
     },
+    logout: () => {
+      localStorage.removeItem('token');
+      history.replace('/login');
+    },
   };
 };
 
 export const request: RequestConfig = {
-  // baseURL: 'http://192.168.247.8:8080/',
   timeout: 1000,
   headers: { 'Access-Control-Allow-Origin': '*' },
   paramsSerializer(params) {

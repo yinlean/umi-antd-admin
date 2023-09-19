@@ -1,66 +1,82 @@
+import { getRules } from '@/api/alert';
 import { Loading3QuartersOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, Input, Row, Switch, Table, Tag } from 'antd';
 import { useState } from 'react';
 import BusinessGroup from '../ObjectList/BusinessGroup';
 import RuleForms from './RuleForms';
+
+const columns = [
+  {
+    title: '级别',
+    dataIndex: 'name',
+    key: 'name',
+    // render: text => <a>{text}</a>,
+  },
+  {
+    title: '名称',
+    dataIndex: 'name',
+    key: 'name',
+    render: () => (
+      <>
+        <Tag color="geekblue">12313</Tag>
+      </>
+    ),
+  },
+  {
+    title: '告警接收者',
+    dataIndex: 'name',
+    key: 'name',
+    // render: text => <a>{text}</a>,
+  },
+  {
+    title: '附加标签',
+    dataIndex: 'name',
+    key: 'name',
+    // render: text => <a>{text}</a>,
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'name',
+    key: 'name',
+    // render: text => <a>{text}</a>,
+  },
+  {
+    title: '启用',
+    dataIndex: 'name',
+    key: 'name',
+    render: () => <Switch defaultChecked onChange={(e) => console.log(e)} />,
+  },
+  {
+    title: '操作',
+    dataIndex: 'name',
+    key: 'name',
+    render: () => (
+      <>
+        <Button type="link">编辑</Button>
+        <Button type="link">删除</Button>
+      </>
+    ),
+  },
+];
+
 const WarnRules = () => {
   const [tableData, setTableData] = useState([{}]);
   const [open, setOpen] = useState(false);
-
-  const columns = [
-    {
-      title: '级别',
-      dataIndex: 'name',
-      key: 'name',
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
-      key: 'name',
-      render: () => (
-        <>
-          <Tag color="geekblue">12313</Tag>
-        </>
-      ),
-    },
-    {
-      title: '告警接收者',
-      dataIndex: 'name',
-      key: 'name',
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: '附加标签',
-      dataIndex: 'name',
-      key: 'name',
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'name',
-      key: 'name',
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: '启用',
-      dataIndex: 'name',
-      key: 'name',
-      render: () => <Switch defaultChecked onChange={(e) => console.log(e)} />,
-    },
-    {
-      title: '操作',
-      dataIndex: 'name',
-      key: 'name',
-      render: () => (
-        <>
-          <Button type="link">编辑</Button>
-          <Button type="link">删除</Button>
-        </>
-      ),
-    },
-  ];
   const onSearch = (value: string) => console.log(value);
+
+  const getRulesList = async () => {
+    if (!bizId) return;
+    const res = await getRules({
+      page: 1,
+      onePage: 100,
+      bizID: 3,
+      // severity:
+      // startTime:
+      // title
+    });
+    console.log('res===>', res);
+  };
+
   return (
     <div className="home-content">
       <BusinessGroup width={200} />

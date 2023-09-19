@@ -97,3 +97,41 @@ export const deleteTeamUser = (data) => {
     data,
   });
 };
+
+// 活跃告警
+export const getActiveAlert = (data) => {
+  return request(
+    `/api/alert-hub/alert/alerts/alerting?${queryString.stringify(data)}`,
+    {
+      method: 'GET',
+      // data,
+    },
+  );
+};
+
+// 历史告警
+export const getAlert = (data) => {
+  return request(`/api/alert-hub/alert/alerts?${queryString.stringify(data)}`, {
+    method: 'GET',
+    // data,
+  });
+};
+
+// 规则查询
+export const getRules = (data) => {
+  return request(
+    `/api/alert-hub/alert/alertrule?${queryString.stringify(data)}`,
+    {
+      method: 'GET',
+      // data,
+    },
+  );
+};
+
+// 创建规则
+export const createRules = (data) => {
+  return request(`/api/alert-hub/alert/alertrule`, {
+    method: 'PUT',
+    data,
+  });
+};

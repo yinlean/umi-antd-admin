@@ -1,13 +1,7 @@
 .container {
   padding-top: 80px;
 }
-
-.grid-box {
-  
-}
-
 .grid-box > div {
-  // background-color: #eebebefe;
   background: linear-gradient(to right, #eebebefe, #eee8befe);
   align-items: center;
   text-align: center;
