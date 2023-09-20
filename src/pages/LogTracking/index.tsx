@@ -1,18 +1,17 @@
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import LogList from './LogList';
+const TARGET = 'fa43q2.natappfree.cc';
+
 const LogTracking = () => {
   //   alert('您的浏览器支持 WebSocket!');
   const [ws, setWs] = useState<WebSocket>();
-  let timer: Timeout;
-  const token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTQ1NjkzMjYsImp0aSI6IjgiLCJpYXQiOjE2OTQzOTY1MjYuMjA2NDIzLCJpc3MiOiJmcmFuayJ9.mgKg6ANydpRvJDIby8dQkt_p4it_QG-TuzCPQ5OelpE';
+  let timer: NodeJS.Timeout;
+  const token = localStorage.getItem('token');
   // 打开一个 web socket
   //   const ws = new WebSocket(`ws://192.168.1.135:10000?token=${token}`);
   useEffect(() => {
-    const socket = new WebSocket(
-      `ws://server.natappfree.cc:44565?token=${token}`,
-    );
+    const socket = new WebSocket(`ws://${TARGET}:44565?token=${token}`);
     socket.onopen = function () {
       // Web Socket 已连接上，使用 send() 方法发送数据
       console.log('链接成功...');
@@ -28,7 +27,8 @@ const LogTracking = () => {
   const sendWs = () => {
     ws?.send(
       JSON.stringify({
-        target: '127.0.0.1:16060',
+        // target: '127.0.0.1:16060',
+        target: TARGET + ':6060',
         app: 'test-app',
         position: '/tmp/templog/a-1.log',
       }),

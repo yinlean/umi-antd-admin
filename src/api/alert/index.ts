@@ -110,7 +110,7 @@ export const getActiveAlert = (data) => {
 };
 
 // 历史告警
-export const getAlert = (data) => {
+export const getHistoryAlert = (data) => {
   return request(`/api/alert-hub/alert/alerts?${queryString.stringify(data)}`, {
     method: 'GET',
     // data,

@@ -87,7 +87,7 @@ export default defineConfig({
   proxy: {
     '/api': {
       // target: 'http://192.168.247.8:8080/',
-      target: 'http://krui3j.natappfree.cc/',
+      target: 'http://x3xbm9.natappfree.cc/',
       changeOrigin: true,
       pathRewrite: { '^/api': '/api' },
     },

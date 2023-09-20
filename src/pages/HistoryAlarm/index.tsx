@@ -1,6 +1,7 @@
-import { getAlert } from '@/api/alert';
+import { getHistoryAlert } from '@/api/alert';
 import { AppstoreOutlined } from '@ant-design/icons';
 import { Badge, Form, Input, Select, Table, Tag } from 'antd';
+import { useEffect } from 'react';
 
 const columns = [
   {
@@ -37,7 +38,7 @@ const HistoryAlarm = () => {
   // 获取历史告警列表
   const getHistoryList = async () => {
     // if (!bizID) return;
-    const res = await getAlert({
+    const res = await getHistoryAlert({
       page: 1,
       onePage: 100,
       // bizID: bizId,
@@ -45,6 +46,9 @@ const HistoryAlarm = () => {
     });
     console.log('res===>', res);
   };
+  useEffect(() => {
+    getHistoryList();
+  }, []);
   return (
     <div>
       <Form
