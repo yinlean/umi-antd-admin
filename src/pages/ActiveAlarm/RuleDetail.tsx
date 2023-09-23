@@ -1,43 +1,62 @@
-import { Drawer, Table, Tag } from 'antd';
-
+import { getHistoryAlert } from '@/api/alert';
+import { Drawer, FormInstance, Table, Tag } from 'antd';
+import { useEffect, useState } from 'react';
 interface Iprops {
   visible: boolean;
   setVisible: (f: boolean) => void;
+  detailInfo: {
+    bizID?: number;
+    name?: string;
+    category: 'biz' | 'name';
+  };
+  form: FormInstance;
 }
 
 function RuleDetail(props: Iprops) {
-  const { visible, setVisible } = props;
+  const { visible, setVisible, detailInfo, form } = props;
+  const [list, setList] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  // 获取告警列表
+  const getHistoryList = async () => {
+    let params = {
+      page: 1,
+      onePage: 100,
+      startTime: form?.getFieldValue('startTime'),
+    };
+    if (detailInfo.category === 'biz') {
+      params.bizID = detailInfo.bizID;
+    } else {
+      params.name = detailInfo.name;
+    }
+    const res = await getHistoryAlert(params);
+    console.log('res===>', res);
+    setList(res?.query || []);
+    setTotal(res?.count ?? 0);
+  };
+
   const columns = [
-    {
-      title: '集群',
-      dataIndex: '',
-      render: () => <div>default</div>,
-    },
     {
       title: '规则标签及事件',
       dataIndex: '',
-      render: () => (
+      render: (_, record) => (
         <div>
-          <Tag color="red">_name__</Tag>
-          <Tag color="purple">cpu=cpu_total</Tag>
-          <Tag color="magenta">magenta</Tag>
-          <Tag color="volcano">volcano</Tag>
-          <Tag color="orange">orange</Tag>
-          <Tag color="gold">gold</Tag>
-          <Tag color="lime">lime</Tag>
-          <Tag color="green">green</Tag>
-          <Tag color="cyan">cyan</Tag>
-          <Tag color="blue">blue</Tag>
-          <Tag color="geekblue">geekblue</Tag>
+          {record?.lables?.map((v) => (
+            <Tag color="purple" key={v}>
+              {v}
+            </Tag>
+          ))}
         </div>
       ),
     },
     {
       title: '计算时间',
-      dataIndex: '',
-      render: () => <div>2023-09-07 12:00:00</div>,
+      dataIndex: 'startTime',
     },
   ];
+
+  useEffect(() => {
+    getHistoryList();
+  }, [detailInfo]);
   return (
     <Drawer
       title="Basic Drawer"
@@ -47,7 +66,14 @@ function RuleDetail(props: Iprops) {
       open={visible}
       onClose={() => setVisible(false)}
     >
-      <Table columns={columns} dataSource={[{}]} />
+      <Table
+        rowKey="id"
+        columns={columns}
+        dataSource={list}
+        pagination={{
+          total,
+        }}
+      />
     </Drawer>
   );
 }

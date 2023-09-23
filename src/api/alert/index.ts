@@ -135,3 +135,20 @@ export const createRules = (data) => {
     data,
   });
 };
+// websocket
+export const getIdent = (data) => {
+  return request(`/api/alert-hub/idents/list?${queryString.stringify(data)}`, {
+    method: 'GET',
+    // data,
+  });
+};
+// websocket
+export const getApp = (data) => {
+  return request(
+    `/api/alert-hub/idents/list/app?${queryString.stringify(data)}`,
+    {
+      method: 'GET',
+      // data,
+    },
+  );
+};

@@ -1,5 +1,6 @@
 import { createUser, updateUser } from '@/api/alert';
-import { Form, Input, Modal, Select, message } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, Select, message } from 'antd';
 import { useEffect } from 'react';
 
 interface Iprops {
@@ -21,10 +22,11 @@ function UserModal(props: Iprops) {
   const { visible, setVisible, reset, fieldsInfo } = props;
 
   const [form] = Form.useForm();
+  const disabled = fieldsInfo?.type === 'update';
+
   const createUserApi = async () => {
     const formValue = await form.validateFields();
     const res = await createUser(formValue);
-    console.log('创建用户===>', res);
     if (res.code === 200) {
       setVisible(false);
       message.success('创建成功');
@@ -33,7 +35,10 @@ function UserModal(props: Iprops) {
   };
   const update = async () => {
     const formValue = await form.validateFields();
-    const res = await updateUser(formValue);
+    const res = await updateUser({
+      ...formValue,
+      id: fieldsInfo?.formValue?.id,
+    });
     if (res.code === 200) {
       setVisible(false);
       message.success('更新成功');
@@ -59,18 +64,25 @@ function UserModal(props: Iprops) {
   }, [fieldsInfo]);
   return (
     <Modal
+      width={900}
       title="创建用户"
       open={visible}
       onOk={handleOk}
       onCancel={handleCancel}
     >
-      <Form labelCol={{ span: 4 }} form={form}>
+      <Form
+        labelCol={{ span: 4 }}
+        form={form}
+        initialValues={{
+          alertWay: [{}],
+        }}
+      >
         <Form.Item
           label="用户名"
           name="name"
           rules={[{ required: true, message: '请输入用户名' }]}
         >
-          <Input placeholder="请输入用户名" />
+          <Input disabled={disabled} placeholder="请输入用户名" />
         </Form.Item>
         <Form.Item
           label="显示名"
@@ -131,6 +143,55 @@ function UserModal(props: Iprops) {
         <Form.Item label="手机" name="phone">
           <Input placeholder="请输入手机" />
         </Form.Item>
+        <Form.List name="alertWay">
+          {(fields, { add, remove }) => (
+            <div
+            // style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}
+            >
+              {fields.map((field) => {
+                console.log('field====>', field);
+                return (
+                  <div
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    key={field.name}
+                  >
+                    <Form.Item
+                      label=""
+                      name={[field.name, 'alertWayType']}
+                      initialValue="dingtalk"
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Select
+                        options={[{ value: 'dingtalk', label: '钉钉' }]}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="alertToken"
+                      name={[field.name, 'alertToken']}
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label="alertGroupName"
+                      name={[field.name, 'alertGroupName']}
+                      style={{ marginLeft: 10 }}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item label="" style={{ marginLeft: 10 }}>
+                      <DeleteOutlined onClick={() => remove(field.name)} />
+                    </Form.Item>
+                  </div>
+                );
+              })}
+
+              <Button type="dashed" onClick={() => add()} block>
+                + Add Item
+              </Button>
+            </div>
+          )}
+        </Form.List>
       </Form>
     </Modal>
   );

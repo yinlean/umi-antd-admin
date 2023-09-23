@@ -24,17 +24,17 @@ export default defineConfig({
       icon: 'HomeOutlined',
       component: './Home',
     },
-    {
-      name: ' CRUD 示例',
-      path: '/table',
-      component: './Table',
-    },
-    {
-      name: '对象列表',
-      path: '/objectList',
-      icon: 'UnorderedListOutlined',
-      component: './ObjectList',
-    },
+    // {
+    //   name: ' CRUD 示例',
+    //   path: '/table',
+    //   component: './Table',
+    // },
+    // {
+    //   name: '对象列表',
+    //   path: '/objectList',
+    //   icon: 'UnorderedListOutlined',
+    //   component: './ObjectList',
+    // },
     {
       name: '活跃告警',
       path: '/activeAlarm',
@@ -86,8 +86,8 @@ export default defineConfig({
   npmClient: 'yarn',
   proxy: {
     '/api': {
-      // target: 'http://192.168.247.8:8080/',
-      target: 'http://x3xbm9.natappfree.cc/',
+      target: 'http://172.20.10.2:8080/',
+      // target: 'http://x3xbm9.natappfree.cc/',
       changeOrigin: true,
       pathRewrite: { '^/api': '/api' },
     },

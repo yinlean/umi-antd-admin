@@ -1,8 +1,7 @@
 import { AppstoreOutlined } from '@ant-design/icons';
 import { Button, Form, Select } from 'antd';
 
-function ActSearch({ getactiveList }) {
-  const [form] = Form.useForm();
+function ActSearch({ getactiveList, form }) {
   const reset = () => {
     form.resetFields();
     getactiveList({
@@ -51,7 +50,9 @@ function ActSearch({ getactiveList }) {
           </Select>
         </Form.Item>
         <Form.Item label="">
-          <Button onClick={search}>搜索</Button>
+          <Button onClick={search} style={{ marginRight: 16 }}>
+            搜索
+          </Button>
           <Button onClick={reset}>重置</Button>
         </Form.Item>
 

@@ -5,13 +5,18 @@ import styles from './index.less';
 interface Iprops {
   bgc: string;
   fontColor: string;
-  setVisible?: (f: boolean) => void;
+  setVisible: (f: boolean) => void;
   category: 'biz' | 'name';
   info: any;
+  setDetailInfo: (f: {
+    bizID?: number;
+    name?: string;
+    category: 'biz' | 'name';
+  }) => void;
 }
 
 function ActCard(props: Iprops) {
-  const { bgc, fontColor, category, info, setVisible } = props;
+  const { bgc, fontColor, category, info, setVisible, setDetailInfo } = props;
   const [teamList, setTeamLIst] = useState<any[]>([]);
 
   const getTeamList = async () => {
@@ -27,7 +32,21 @@ function ActCard(props: Iprops) {
   return (
     <Card
       bordered={false}
-      // onClick={() => setVisible(true)}
+      onClick={() => {
+        setVisible(true);
+        const data =
+          category === 'biz'
+            ? {
+                bizID: info.biz_id,
+              }
+            : {
+                name: info.name,
+              };
+        setDetailInfo({
+          ...data,
+          category,
+        });
+      }}
       style={{
         width: 240,
         height: 140,

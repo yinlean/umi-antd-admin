@@ -1,41 +1,48 @@
 import { getBizInfo, getHistoryAlert } from '@/api/alert';
-import { AppstoreOutlined } from '@ant-design/icons';
-import { Badge, Form, Input, Select, Table, Tag } from 'antd';
+import { Button, Form, Input, Select, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 
 const columns = [
   {
-    title: '集群',
+    title: '规则标签及事件',
     dataIndex: '',
-    render: () => (
-      <div className="">
-        <Badge color="#f00" /> default
+    render: (_, record) => (
+      <div>
+        {record?.lables?.map((v) => (
+          <Tag color="purple" key={v}>
+            {v}
+          </Tag>
+        ))}
       </div>
     ),
   },
   {
-    title: '规则标签及事件',
-    dataIndex: '',
-    render: () => (
-      <div>
-        <Tag color="purple">cpu=cpu_total</Tag>
-        <Tag color="purple">cpu=cpu_total</Tag>
-        <Tag color="purple">cpu=cpu_total</Tag>
-        <Tag color="purple">cpu=cpu_total</Tag>
-        <Tag color="purple">cpu=cpu_total</Tag>
-        <Tag color="purple">cpu=cpu_total</Tag>
-      </div>
-    ),
+    title: 'name',
+    dataIndex: 'name',
+  },
+  {
+    title: '等级',
+    dataIndex: 'severity',
+    render: (s) => {
+      const severity = {
+        1: '一级',
+        2: '二级',
+        3: '三级',
+      };
+      return severity[s];
+    },
   },
   {
     title: '计算时间',
-    dataIndex: '',
-    render: () => <div>2023-09-07 12:00:00</div>,
+    dataIndex: 'startTime',
   },
 ];
 
 const HistoryAlarm = () => {
   const [teamList, setTeamLIst] = useState<any[]>([]);
+  const [form] = Form.useForm();
+  const [total, setTotal] = useState<number>(0);
+  const [list, setList] = useState<any[]>([]);
 
   const getTeamList = async () => {
     const res = await getBizInfo({
@@ -50,29 +57,38 @@ const HistoryAlarm = () => {
 
   // 获取历史告警列表
   const getHistoryList = async () => {
-    // if (!bizID) return;
+    const params = form?.getFieldsValue();
     const res = await getHistoryAlert({
       page: 1,
       onePage: 100,
-      // bizID: bizId,
-      // startTime:
+      ...params,
     });
-    console.log('res===>', res);
+    setList(res?.query ?? []);
+    setTotal(res?.count ?? 0);
   };
   useEffect(() => {
     getHistoryList();
   }, []);
+  const search = () => {
+    getHistoryList();
+  };
+  const reset = () => {
+    form?.resetFields();
+    getHistoryList();
+  };
   return (
     <div>
       <Form
         layout="inline"
-        initialValues={{}}
-        // onFinish={onFinish}
+        initialValues={{
+          startTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
+        }}
+        form={form}
       >
-        <Form.Item label="" name="username">
+        {/* <Form.Item label="" name="username">
           <AppstoreOutlined style={{ fontSize: 20 }} />
-          {/* <BarsOutlined style={{ fontSize: 20 }} /> */}
-        </Form.Item>
+          <BarsOutlined style={{ fontSize: 20 }} />
+        </Form.Item> */}
         <Form.Item label="时间" name="startTime">
           <Select style={{ width: 200 }} placeholder="时间">
             <Select.Option value={Date.now() - 6 * 60 * 60 * 1000}>
@@ -89,18 +105,10 @@ const HistoryAlarm = () => {
             </Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="" name="name">
+        <Form.Item label="name" name="name">
           <Input placeholder="" />
         </Form.Item>
-        <Form.Item name="remember">
-          <Select placeholder="业务组" style={{ width: 140 }}>
-            {teamList?.map((v) => (
-              <Select.Option value={v.id} key={v.id}>
-                {v.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+
         <Form.Item label="事件级别" name="severity">
           <Select placeholder="事件级别">
             <Select.Option value={1}>一级</Select.Option>
@@ -114,10 +122,20 @@ const HistoryAlarm = () => {
             <Select.Option value={'false'}>恢复</Select.Option>
           </Select>
         </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}></Form.Item>
+        <Form.Item label="">
+          <Button onClick={search} style={{ marginRight: 16 }}>
+            搜索
+          </Button>
+          <Button onClick={reset}>重置</Button>
+        </Form.Item>
       </Form>
-      <Table columns={columns} dataSource={[{}]} />
+      <Table
+        columns={columns}
+        dataSource={list}
+        pagination={{
+          total,
+        }}
+      />
     </div>
   );
 };

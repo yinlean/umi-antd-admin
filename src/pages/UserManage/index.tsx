@@ -26,7 +26,7 @@ const UserManage = () => {
     },
     {
       title: '显示名',
-      dataIndex: 'dispalyName',
+      dataIndex: 'displayName',
     },
     {
       title: '手机',
@@ -49,11 +49,13 @@ const UserManage = () => {
                 formValue: {
                   id: record.id,
                   displayName: record.displayName,
-                  name: record.displayName,
-                  role: record.displayName,
-                  phone: record.displayName,
+                  name: record.name,
+                  role: record.role,
+                  phone: record.phone,
                 },
               });
+              setUserVisible(true);
+
               console.log('record====', record);
             }}
           >
@@ -91,7 +93,6 @@ const UserManage = () => {
   };
   const deleteItem = async (id) => {
     const res = await deleteUser({ id });
-    console.log('res====>>', res);
     if (res.code === 200) {
       message.success('删除成功');
       reset();

@@ -7,7 +7,6 @@ import { history } from '@umijs/max';
 import { message } from 'antd';
 import queryString from 'query-string';
 import Cat from './assets/cat.jpeg';
-
 export async function getInitialState(): Promise<{
   name: string;
   avatar: string;
@@ -32,7 +31,7 @@ export const layout = () => {
 };
 
 export const request: RequestConfig = {
-  timeout: 1000,
+  timeout: 1000000,
   headers: { 'Access-Control-Allow-Origin': '*' },
   paramsSerializer(params) {
     return queryString.stringify(params);

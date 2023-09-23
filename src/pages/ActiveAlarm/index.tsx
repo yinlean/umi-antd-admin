@@ -1,13 +1,24 @@
 import { getActiveAlert } from '@/api/alert';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import ActCard from './ActCard';
 import ActSearch from './ActSearch';
 import RuleDetail from './RuleDetail';
 import styles from './index.less';
 const ActiveAlarm = () => {
+  const [form] = Form.useForm();
+
   const [visible, setVisible] = useState(false);
   const [cardData, setCardData] = useState<any[]>([]);
   const [category, setCategory] = useState<'biz' | 'name'>('name');
+  const [detailInfo, setDetailInfo] = useState<{
+    bizID?: number;
+    name?: string;
+    category: 'biz' | 'name';
+  }>({
+    category,
+  });
+
   const handleParams = (category) => {
     return category === 'name'
       ? { name: 'true' }
@@ -38,7 +49,7 @@ const ActiveAlarm = () => {
   return (
     <div className={styles['active-content']}>
       <div className={styles['warning-card']}>
-        <ActSearch getactiveList={getactiveList} />
+        <ActSearch getactiveList={getactiveList} form={form} />
         <div className={styles['act-card']}>
           {/* {[1, 2, 3].map((v, index) => (
             <ActCard
@@ -56,11 +67,17 @@ const ActiveAlarm = () => {
               bgc="#FBF2E7"
               fontColor="#E38434"
               setVisible={setVisible}
+              setDetailInfo={setDetailInfo}
             />
           ))}
         </div>
       </div>
-      <RuleDetail visible={visible} setVisible={setVisible} />
+      <RuleDetail
+        form={form}
+        visible={visible}
+        setVisible={setVisible}
+        detailInfo={detailInfo}
+      />
     </div>
   );
 };
