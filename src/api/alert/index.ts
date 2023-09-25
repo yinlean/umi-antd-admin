@@ -135,6 +135,13 @@ export const createRules = (data) => {
     data,
   });
 };
+// 创建规则
+export const updateRules = (data) => {
+  return request(`/api/alert-hub/alert/alertrule`, {
+    method: 'POST',
+    data,
+  });
+};
 // websocket
 export const getIdent = (data) => {
   return request(`/api/alert-hub/idents/list?${queryString.stringify(data)}`, {

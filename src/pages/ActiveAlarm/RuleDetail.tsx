@@ -21,6 +21,7 @@ function RuleDetail(props: Iprops) {
     let params = {
       page: 1,
       onePage: 100,
+      state: "true",
       startTime: form?.getFieldValue('startTime'),
     };
     if (detailInfo.category === 'biz') {
@@ -59,7 +60,7 @@ function RuleDetail(props: Iprops) {
   }, [detailInfo]);
   return (
     <Drawer
-      title="Basic Drawer"
+      title="详细信息"
       placement="right"
       width={600}
       closable={false}

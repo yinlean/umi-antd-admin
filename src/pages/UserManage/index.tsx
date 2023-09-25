@@ -104,7 +104,11 @@ const UserManage = () => {
         <Col>
           <Input.Search
             placeholder="用户名,邮箱或手机号"
-            onSearch={(v) => console.log(v)}
+            onSearch={(v) =>  {
+              setSearchKey(v)
+              getUserListApi()
+            }
+          }
           ></Input.Search>
         </Col>
         <Col>

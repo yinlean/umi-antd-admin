@@ -237,7 +237,7 @@ const TeamManage = () => {
           align="middle"
         >
           <Col>
-            <h3>聚合规则</h3>
+            <h3>团队选择</h3>
           </Col>
           <Col>
             <Button

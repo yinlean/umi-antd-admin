@@ -1,0 +1,20 @@
+.warn-rule {
+  display: flex;
+  padding: 5px 0;
+  height: 90vh;
+}
+.warn-rule .rule-list {
+  width: 240px;
+  padding: 10px;
+}
+.warn-rule .rule-list .rules-item {
+  height: 30px;
+  color: #5B6379;
+}
+.warn-rule .team-list {
+  flex: 1;
+  padding: 10px;
+}
+.warn-rule .active {
+  color: #9373EE;
+}

@@ -2,7 +2,7 @@ import { getApp, getIdent } from '@/api/alert';
 import { Button, Cascader } from 'antd';
 import { useEffect, useState } from 'react';
 import LogList from './LogList';
-const TARGET = '172.20.10.2';
+const TARGET = '127.0.0.1';
 
 interface Option {
   value?: string | number | null;

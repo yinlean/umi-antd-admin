@@ -21,6 +21,17 @@ const columns = [
     dataIndex: 'name',
   },
   {
+    title: '告警状态',
+    dataIndex: 'status',
+    render: (s) => {
+      const status = {
+        true: '告警',
+        false: '恢复',
+      };
+      return status[s];
+    },
+  },
+  {
     title: '等级',
     dataIndex: 'severity',
     render: (s) => {
@@ -105,7 +116,7 @@ const HistoryAlarm = () => {
             </Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="name" name="name">
+        <Form.Item label="内容" name="name">
           <Input placeholder="" />
         </Form.Item>
 
@@ -117,7 +128,7 @@ const HistoryAlarm = () => {
           </Select>
         </Form.Item>
         <Form.Item label="状态" name="state">
-          <Select placeholder="事件级别">
+          <Select placeholder="状态">
             <Select.Option value={'true'}>告警</Select.Option>
             <Select.Option value={'false'}>恢复</Select.Option>
           </Select>

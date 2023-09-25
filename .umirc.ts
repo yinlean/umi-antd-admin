@@ -86,8 +86,8 @@ export default defineConfig({
   npmClient: 'yarn',
   proxy: {
     '/api': {
-      target: 'http://172.20.10.2:8080/',
-      // target: 'http://x3xbm9.natappfree.cc/',
+      // target: 'http://172.20.10.2:8080/',
+      target: 'http://ydsth9.natappfree.cc/',
       changeOrigin: true,
       pathRewrite: { '^/api': '/api' },
     },

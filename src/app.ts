@@ -12,13 +12,13 @@ export async function getInitialState(): Promise<{
   avatar: string;
   userName: string;
 }> {
-  return { name: '@umijs/max', avatar: './assets/cat.jpeg', userName: '张三' };
+  return { name: 'Admin', avatar: './assets/cat.jpeg', userName: '张三' };
 }
 
 export const layout = () => {
   return {
     logo: Cat,
-    title: '数据管理系统',
+    title: '日志告警中心',
     siderWidth: 180,
     menu: {
       locale: false,
