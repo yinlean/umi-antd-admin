@@ -7,18 +7,7 @@ const UserManage = () => {
   const [tableData, setTableData] = useState([]);
   const [searchKey, setSearchKey] = useState('');
   const [total, setTotal] = useState(0);
-  const [fieldsInfo, setFieldsInfo] = useState<{
-    type: 'create' | 'update';
-    formValue?: {
-      id: string;
-      displayName?: string;
-      name: string;
-      role?: string;
-      phone?: string;
-    };
-  }>({
-    type: 'create',
-  });
+  const [userId, setUserId] = useState<number>();
   const columns = [
     {
       title: '用户名',
@@ -44,19 +33,9 @@ const UserManage = () => {
           <Button
             type="link"
             onClick={() => {
-              setFieldsInfo({
-                type: 'update',
-                formValue: {
-                  id: record.id,
-                  displayName: record.displayName,
-                  name: record.name,
-                  role: record.role,
-                  phone: record.phone,
-                },
-              });
+              setUserId(record.id);
               setUserVisible(true);
-
-              console.log('record====', record);
+              console.log('record.id====', record.id);
             }}
           >
             编辑
@@ -104,17 +83,16 @@ const UserManage = () => {
         <Col>
           <Input.Search
             placeholder="用户名,邮箱或手机号"
-            onSearch={(v) =>  {
-              setSearchKey(v)
-              getUserListApi()
-            }
-          }
+            onSearch={(v) => {
+              setSearchKey(v);
+              getUserListApi();
+            }}
           ></Input.Search>
         </Col>
         <Col>
           <Button
             onClick={() => {
-              setFieldsInfo({ type: 'create' });
+              setUserId(0);
               setUserVisible(true);
             }}
           >
@@ -134,7 +112,7 @@ const UserManage = () => {
         visible={userVisible}
         setVisible={setUserVisible}
         reset={reset}
-        fieldsInfo={fieldsInfo}
+        userId={userId}
       />
     </div>
   );

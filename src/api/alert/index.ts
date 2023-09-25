@@ -36,7 +36,7 @@ export const deleteUser = (data) => {
 };
 
 export const getUserInfo = (data) => {
-  return request('/api/alert-hub/users/info', {
+  return request(`/api/alert-hub/users/info?${queryString.stringify(data)}`, {
     method: 'GET',
     data,
   });

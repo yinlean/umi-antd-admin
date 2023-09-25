@@ -1,29 +1,27 @@
-import { createUser, updateUser } from '@/api/alert';
+import { createUser, getUserInfo, updateUser } from '@/api/alert';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Select, message } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Iprops {
   visible: boolean;
   setVisible: (f: boolean) => void;
   reset: () => void;
-  fieldsInfo: {
-    type: 'create' | 'update';
-    formValue?: {
-      id: string;
-      displayName?: string;
-      name: string;
-      role?: string;
-      phone?: string;
-    };
-  };
+  userId: number;
 }
 function UserModal(props: Iprops) {
-  const { visible, setVisible, reset, fieldsInfo } = props;
-
+  const { visible, setVisible, reset, userId } = props;
+  const [serverData, setServerData] = useState({});
   const [form] = Form.useForm();
-  const disabled = fieldsInfo?.type === 'update';
-
+  const disabled = Boolean(userId);
+  console.log(userId);
+  const userInfo = async () => {
+    if (!userId) return;
+    const res = await getUserInfo({ id: userId });
+    console.log('userInfo====>', res);
+    setServerData(res);
+    form.setFieldsValue(res);
+  };
   const createUserApi = async () => {
     const formValue = await form.validateFields();
     const res = await createUser(formValue);
@@ -36,8 +34,9 @@ function UserModal(props: Iprops) {
   const update = async () => {
     const formValue = await form.validateFields();
     const res = await updateUser({
+      ...serverData,
       ...formValue,
-      id: fieldsInfo?.formValue?.id,
+      id: userId,
     });
     if (res.code === 200) {
       setVisible(false);
@@ -46,7 +45,7 @@ function UserModal(props: Iprops) {
     }
   };
   const handleOk = () => {
-    if (fieldsInfo.type === 'create') {
+    if (!userId) {
       createUserApi();
       return;
     }
@@ -55,13 +54,14 @@ function UserModal(props: Iprops) {
   const handleCancel = () => {
     setVisible(false);
   };
+
   useEffect(() => {
-    if (fieldsInfo.type === 'update') {
-      form.setFieldsValue(fieldsInfo.formValue);
-    } else {
+    if (!visible) {
       form.resetFields();
+    } else {
+      userInfo();
     }
-  }, [fieldsInfo]);
+  }, [visible]);
   return (
     <Modal
       width={900}
@@ -71,7 +71,7 @@ function UserModal(props: Iprops) {
       onCancel={handleCancel}
     >
       <Form
-        labelCol={{ span: 4 }}
+        // labelCol={{ span: 5 }}
         form={form}
         initialValues={{
           alertWay: [{}],
@@ -149,7 +149,6 @@ function UserModal(props: Iprops) {
             // style={{ display: 'flex', rowGap: 16, flexDirection: 'column' }}
             >
               {fields.map((field) => {
-                console.log('field====>', field);
                 return (
                   <div
                     style={{ display: 'flex', alignItems: 'center' }}
