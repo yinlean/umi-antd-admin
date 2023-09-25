@@ -71,12 +71,12 @@ export default defineConfig({
       icon: 'SlidersOutlined',
       component: './WarnRules',
     },
-    {
+/*     {
       name: '即时查询',
       path: '/searchOnline',
       icon: 'BarChartOutlined',
       component: './SearchOnline',
-    },
+    }, */
     {
       path: '/*',
       component: './NotFound',
@@ -87,7 +87,7 @@ export default defineConfig({
   proxy: {
     '/api': {
       // target: 'http://172.20.10.2:8080/',
-      target: 'http://ydsth9.natappfree.cc/',
+      target: 'http://localhost:8080/',
       changeOrigin: true,
       pathRewrite: { '^/api': '/api' },
     },

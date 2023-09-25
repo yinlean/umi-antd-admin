@@ -165,14 +165,14 @@ function UserModal(props: Iprops) {
                       />
                     </Form.Item>
                     <Form.Item
-                      label="alertToken"
+                      label="token"
                       name={[field.name, 'alertToken']}
                       style={{ marginLeft: 10 }}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label="alertGroupName"
+                      label="告警群组"
                       name={[field.name, 'alertGroupName']}
                       style={{ marginLeft: 10 }}
                     >
